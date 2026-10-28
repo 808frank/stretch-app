@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1d4ed8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Stretches">
+<meta name="application-name" content="Stretches">
+<title>Morning Stretch and Plank Routine</title>
+<link rel="icon" id="ico">
+<link rel="apple-touch-icon" id="aico">
+<link rel="manifest" id="mani">
+<style>
+:root{--bg:#fff;--card:#f6f7f9;--tx:#111;--tx2:#555;--bd:#dde1e6;--ink:#1d4ed8;--far:#9db4ee;--warn:#b45309}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1115;--card:#1a1d23;--tx:#eee;--tx2:#aab;--bd:#2c313a;--ink:#6b9bff;--far:#34497a;--warn:#f59e0b}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,Roboto,sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+main{max-width:640px;margin:0 auto;padding:16px}h1{font-size:22px;margin:8px 0 4px}h2{font-size:17px;margin:20px 0 8px}p{margin:6px 0}.sub{color:var(--tx2);font-size:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+button{font:inherit;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:12px;padding:12px 16px;min-width:84px}
+button.p{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:600}button:disabled{opacity:.4}
+label{display:flex;gap:6px;align-items:center;font-size:15px}input[type=checkbox]{width:20px;height:20px}
+.timer{text-align:center;font-size:64px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.bar{height:10px;border-radius:5px;background:var(--bd);overflow:hidden;margin-top:12px}.bar div{height:100%;background:var(--ink);width:0}
+.meta{display:flex;justify-content:space-between;color:var(--tx2);font-size:13px;margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{text-align:left;padding:8px 4px;border-bottom:1px solid var(--bd);vertical-align:top}
+.warn{border-left:4px solid var(--warn);padding:8px 12px;background:var(--card);border-radius:8px}
+.pic img,.pic video{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;transition:transform .3s}.hide{display:none}
+</style>
+</head>
+<body>
+<main>
+<section id="list">
+<h1>Morning Stretch and Plank Routine</h1>
+<p class="sub">About ten minutes on the floor: spine movement, three plank holds and three stretches.</p>
+<div class="card"><div class="pic" id="svgL"></div><p class="sub" id="demoName" style="text-align:center"></p></div>
+<div class="row"><button class="p" id="startBtn">Start</button>
+<label><input type="checkbox" id="gaps" checked> Rest gaps</label>
+<label><input type="checkbox" class="snd" checked> Beep</label></div>
+<p class="sub">Trainer is an original fictional character. Rest gaps add get-ready and switch-side time. The 10 s rest between front planks always stays. Left-side holds show the trainer mirrored.</p>
+<h2>The routine</h2><table><thead><tr><th>Move</th><th>Dose</th><th>Position</th></tr></thead><tbody id="tbody"></tbody></table>
+<p class="sub">Finish: roll to your side and get up slowly.</p>
+<h2>How to do each move</h2><ol id="how"></ol>
+<h2>When to stop</h2>
+<p class="warn"><b>Stop at once and get medical help</b> for chest pain or tightness, unusual breathlessness or dizziness. Tell Dr Anastasius you're doing daily planks.</p>
+<ul><li>Sharp pain, or pain, numbness or tingling down a leg: stop that move and skip it next time.</li>
+<li>An ache lasting over an hour, or worse next morning: ease off that move for a few days.</li>
+<li>Gout flare in a big toe: keep that foot flat when kneeling and plank on your knees. In a knee: do only the lying moves.</li></ul>
+</section>
+<section id="play" class="hide">
+<h1 id="pName"></h1><p class="sub" id="pSub"></p>
+<h2 id="pHead"></h2>
+<div class="card"><div class="pic" id="svgP"></div>
+<div class="timer" id="pTime"></div><p class="sub" style="text-align:center" id="pNext"></p>
+<div class="bar"><div id="pBar"></div></div><div class="meta"><span id="pStep"></span><span id="pLeft"></span></div></div>
+<div class="row"><button id="prev">Previous</button><button class="p" id="pause">Pause</button><button id="next">Next</button><button id="end">End</button></div>
+<p id="pHow"></p><label><input type="checkbox" class="snd" checked> Beep</label>
+</section>
+<section id="done" class="hide">
+<h1>Routine complete</h1><p class="sub">All seven moves done. Roll to your side and get up slowly.</p>
+<div class="card"><div class="pic" id="svgD"></div></div>
+<p id="dTot"></p>
+<div class="row"><button class="p" id="again">Do it again</button><button id="back">Back to routine</button></div>
+</section>
+</main>
+<script>
+"use strict";
+// Icon + manifest generated inline (data URLs)
+(function(){
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="96" fill="#1d4ed8"/><g stroke="#fff" stroke-width="26" stroke-linecap="round" fill="none"><path d="M180 300 Q256 230 330 300"/><path d="M330 300 L330 420 M300 300 L300 420 M180 300 L180 420 L100 420"/></g><circle cx="370" cy="270" r="34" fill="#fff"/></svg>';
+  var ico='data:image/svg+xml,'+encodeURIComponent(svg);
+  var c=document.createElement('canvas');c.width=c.height=512;var png=ico;
+  document.getElementById('ico').href=ico;
+  function setMani(src){
+    var m={name:"Morning Stretch and Plank Routine",short_name:"Stretches",start_url:".",scope:".",display:"standalone",background_color:"#ffffff",theme_color:"#1d4ed8",
+      icons:[{src:src,sizes:"512x512",type:src.indexOf('image/png')>0?"image/png":"image/svg+xml",purpose:"any maskable"},{src:ico,sizes:"any",type:"image/svg+xml"}]};
+    document.getElementById('mani').href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(m));
+    document.getElementById('aico').href=src;
+  }
+  setMani(ico);
+  var img=new Image();img.onload=function(){try{c.getContext('2d').drawImage(img,0,0,512,512);setMani(c.toDataURL('image/png'));}catch(e){}};img.src=ico;
+})();
+
+var table={hd:[222,110],sh:[200,122],hp:[120,122],sp:[160,120],el:[200,160],ha:[200,200],el2:[194,160],ha2:[194,200],kn:[120,200],ft:[62,200],kn2:[114,200],ft2:[56,200]};
+var stand={hd:[160,38],sh:[160,62],hp:[160,122],el:[156,92],ha:[154,122],el2:[164,92],ha2:[166,122],kn:[157,162],ft:[155,200],kn2:[165,162],ft2:[168,200]};
+function ext(a,b){var o={};for(var k in a)o[k]=a[k];for(k in b)o[k]=b[k];return o;}
+var anims={
+ cat:{a:ext(table,{sp:[160,96],hd:[218,128]}),b:ext(table,{sp:[160,136],hd:[226,100]}),mode:"cycle",period:5.6},
+ bird:{a:table,b:ext(table,{el:[244,118],ha:[288,116],kn:[78,122],ft:[32,120]}),mode:"hold",period:1.5},
+ hip:{a:{hd:[142,58],sh:[140,80],hp:[138,150],el:[158,112],ha:[188,142],el2:[152,114],ha2:[184,144],kn:[118,200],ft:[66,200],kn2:[194,150],ft2:[194,200]},
+      b:{hd:[160,58],sh:[158,80],hp:[156,152],el:[176,114],ha:[200,142],el2:[170,116],ha2:[196,144],kn:[118,200],ft:[66,200],kn2:[208,150],ft2:[196,200]},mode:"hold",period:2},
+ front:{a:{hd:[250,150],sh:[228,168],hp:[150,192],el:[228,200],ha:[268,200],el2:[222,200],ha2:[262,200],kn:[100,200],ft:[62,182],kn2:[96,200],ft2:[58,182]},
+      b:{hd:[252,132],sh:[230,146],hp:[150,168],el:[230,200],ha:[270,200],el2:[224,200],ha2:[264,200],kn:[100,200],ft:[62,182],kn2:[96,200],ft2:[58,182]},mode:"hold",period:1.5},
+ side:{a:{hd:[72,150],sh:[96,166],hp:[170,196],el:[96,200],ha:[130,200],el2:[120,180],ha2:[160,186],kn:[222,198],ft:[178,200],kn2:[226,194],ft2:[182,196]},
+      b:{hd:[74,132],sh:[96,152],hp:[164,172],el:[96,200],ha:[130,200],el2:[124,160],ha2:[160,166],kn:[224,196],ft:[180,198],kn2:[228,192],ft2:[184,194]},mode:"hold",period:1.5},
+ ham:{a:{hd:[58,186],sh:[86,192],hp:[168,194],el:[126,170],ha:[160,150],el2:[122,172],ha2:[156,152],kn:[200,156],ft:[228,116],kn2:[228,196],ft2:[286,196],towel:1},
+      b:{hd:[58,186],sh:[86,192],hp:[168,194],el:[118,160],ha:[146,136],el2:[114,162],ha2:[142,138],kn:[190,140],ft:[206,86],kn2:[228,196],ft2:[286,196],towel:1},mode:"hold",period:2},
+ fig4:{a:{hd:[58,186],sh:[86,192],hp:[168,194],el:[130,166],ha:[196,160],el2:[126,168],ha2:[190,162],kn:[234,150],ft:[206,146],kn2:[212,146],ft2:[244,194]},
+      b:{hd:[58,186],sh:[86,192],hp:[168,194],el:[124,160],ha:[182,140],el2:[120,162],ha2:[176,142],kn:[222,140],ft:[194,128],kn2:[196,128],ft2:[234,136]},mode:"hold",period:2},
+ rest:{a:stand,b:ext(stand,{hd:[160,36],sh:[160,60]}),mode:"cycle",period:4}
+};
+var moves=[
+ {id:"cat",name:"Cat–cow",dose:"8 slow cycles",pos:"Hands and knees",how:"Hands under shoulders, knees under hips. Slowly round your back up, then let it dip gently. Stay in the middle of the range: this is movement, not a stretch."},
+ {id:"bird",name:"Bird dog",dose:"5 holds of 10 s each side, alternating",pos:"Hands and knees",how:"Reach one arm forward and the opposite leg back until both are level with the floor. Hold 10 s, return, then do the other side. Keep your hips level, as if a glass of water sat on your lower back."},
+ {id:"hip",name:"Half-kneeling hip flexor stretch",dose:"40 s right, 40 s left",pos:"Kneeling, cushion under the knee",how:"Kneel on one knee with the other foot forward, both knees at 90°. Squeeze the buttock of the kneeling side and tuck your tailbone under, then shift forward until the front of that hip stretches. Don't arch your lower back."},
+ {id:"front",name:"Front plank",dose:"2 holds of 20 s, 10 s rest between",pos:"Forearms and knees",how:"Forearms under your shoulders, knees on the floor, body straight from head to knees. Keep breathing; holding your breath raises your blood pressure."},
+ {id:"side",name:"Side plank",dose:"3 holds of 10 s each side",pos:"Forearm, knees bent",how:"Lie on your side, elbow under your shoulder, knees bent to 90°. Lift your hips until head, hips and knees are in a straight line, then lower. Keep your hips pushed forward, not sagging or sitting back."},
+ {id:"ham",name:"Lying hamstring stretch",dose:"40 s right, 40 s left",pos:"On your back, towel round the foot",how:"Loop a towel round one foot and raise that leg until the back of the thigh stretches. Keep the other leg flat and your lower back on the floor. Soften the raised knee if you need to."},
+ {id:"fig4",name:"Lying figure-4 stretch",dose:"40 s right, 40 s left",pos:"On your back",how:"Both knees bent, cross one ankle over the other knee. Reach through and pull the bottom thigh toward you until the crossed side's buttock stretches. Keep your tailbone on the floor."}
+];
+function buildSteps(gaps){
+ var s=[];function w(m,d,side,l){s.push({move:m,side:side,dur:d,kind:"work",label:l});}
+ function g(m,d,l){if(gaps)s.push({move:m,side:"",dur:d,kind:"gap",label:l});}
+ w(0,45,"","8 slow cycles");g(1,10,"Get ready: bird dog");
+ for(var i=1;i<=5;i++){w(1,10,"Right","Hold "+i+" of 5");g(1,3,"Return, switch side");w(1,10,"Left","Hold "+i+" of 5");if(i<5)g(1,3,"Return, switch side");}
+ g(2,10,"Get ready: hip flexor");w(2,40,"Right","Right knee down");g(2,10,"Switch side");w(2,40,"Left","Left knee down");
+ g(3,10,"Get ready: front plank");w(3,20,"","Hold 1 of 2");s.push({move:3,side:"",dur:10,kind:"rest",label:"Rest (part of the routine)"});w(3,20,"","Hold 2 of 2");
+ g(4,10,"Get ready: side plank");
+ ["Right","Left"].forEach(function(sd){for(var i=1;i<=3;i++){w(4,10,sd,"Hold "+i+" of 3");if(i<3)g(4,5,"Lower and rest");}if(sd==="Right")g(4,10,"Roll over, switch side");});
+ g(5,10,"Get ready: hamstring");w(5,40,"Right","Right leg up");g(5,10,"Switch side");w(5,40,"Left","Left leg up");
+ g(6,10,"Get ready: figure-4");w(6,40,"Right","Right ankle over left knee");g(6,10,"Switch side");w(6,40,"Left","Left ankle over right knee");
+ return s;
+}
+function lerp(a,b,t){return[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];}
+var KEYS=["hd","sh","hp","el","ha","el2","ha2","kn","ft","kn2","ft2"];
+var IMG={cat:"media/cat.jpg",cow:"media/cow.jpg",bird:"media/bird.jpg",hip:"media/hip.jpg",front:"media/front.jpg",side:"media/side.jpg",ham:"media/ham.jpg",fig4:"media/fig4.jpg"};
+var VBAD={};
+var VID={cat:"media/cat.mp4",bird:"media/bird.mp4",hip:"media/hip.mp4",front:"media/front.mp4",side:"media/side.mp4",ham:"media/ham.mp4",fig4:"media/fig4.mp4"};
+function draw(box,animId,el,mirror){
+ var key=animId==="rest"?"front":animId;if(!IMG[key]&&!VID[key])key="front";
+ var vs=VID[key],poster=IMG[key]||IMG.front,node;
+ if(vs&&!VBAD[key]){
+  node=box.firstChild;if(!node||node.tagName!=="VIDEO"){box.innerHTML="";node=document.createElement("video");node.muted=true;node.defaultMuted=true;node.loop=true;node.autoplay=true;node.playsInline=true;["muted","loop","autoplay","playsinline"].forEach(function(a){node.setAttribute(a,"");});node.setAttribute("aria-label","Trainer demonstrating the move");box.appendChild(node);}
+  if(node.dataset.k!==key){node.dataset.k=key;node.setAttribute("poster",poster);node.onerror=function(){VBAD[key]=1;box.innerHTML="";};node.src=vs;var p=node.play();if(p&&p.catch)p.catch(function(){});}
+  else if(node.paused){var q=node.play();if(q&&q.catch)q.catch(function(){});}
+ }else{
+  var src;if(animId==="cat")src=(Math.floor(el/2.8)%2)?IMG.cow:IMG.cat;else src=poster;
+  node=box.firstChild;if(!node||node.tagName!=="IMG"){box.innerHTML="";node=document.createElement("img");node.alt="Trainer demonstrating the move";box.appendChild(node);}
+  if(node.getAttribute("src")!==src)node.setAttribute("src",src);
+ }
+ node.style.transform=mirror?"scaleX(-1)":"none";node.style.opacity=(animId==="rest")?".55":"1";
+}
+function fmt(s){var x=Math.max(0,Math.ceil(s));return Math.floor(x/60)+":"+String(x%60).padStart(2,"0");}
+function $(i){return document.getElementById(i);}
+var tb="",hw="";moves.forEach(function(m){tb+="<tr><td>"+m.name+"</td><td>"+m.dose+"</td><td>"+m.pos+"</td></tr>";hw+="<li><b>"+m.name+".</b> "+m.how+"</li>";});
+$("tbody").innerHTML=tb;$("how").innerHTML=hw;
+
+var S={screen:"list",idx:0,el:0,running:false,steps:buildSteps(true),sound:true,lastBeep:-1,anim:0};
+var actx=null;
+function beep(f,len){if(!S.sound)return;try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();var o=actx.createOscillator(),g=actx.createGain();o.frequency.value=f;g.gain.setValueAtTime(.15,actx.currentTime);g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+len);o.connect(g);g.connect(actx.destination);o.start();o.stop(actx.currentTime+len);}catch(e){}}
+var wl=null;
+function wake(on){try{if(on&&"wakeLock" in navigator&&!wl){navigator.wakeLock.request("screen").then(function(l){wl=l;l.addEventListener("release",function(){wl=null;});}).catch(function(){});}else if(!on&&wl){wl.release();wl=null;}}catch(e){}}
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"&&S.screen==="play")wake(true);});
+function total(){return S.steps.reduce(function(a,s){return a+s.dur;},0);}
+function show(sc){S.screen=sc;["list","play","done"].forEach(function(x){$(x).classList.toggle("hide",x!==sc);});wake(sc==="play");window.scrollTo(0,0);}
+function go(i){if(i>=S.steps.length){S.running=false;show("done");$("dTot").textContent="Total time "+fmt(total())+". Mild tightness is normal; sharp pain, leg numbness or an ache lasting over an hour means ease off that move.";beep(1046,.6);return;}
+ S.idx=Math.max(0,i);S.el=0;S.lastBeep=-1;}
+function start(){S.steps=buildSteps($("gaps").checked);S.running=true;show("play");go(0);beep(880,.2);}
+$("startBtn").onclick=start;$("again").onclick=start;$("back").onclick=function(){show("list");};
+$("prev").onclick=function(){go(S.idx-1);};$("next").onclick=function(){go(S.idx+1);};
+$("pause").onclick=function(){S.running=!S.running;};$("end").onclick=function(){S.running=false;show("list");};
+$("gaps").onchange=function(){S.steps=buildSteps(this.checked);updStart();};
+Array.prototype.forEach.call(document.querySelectorAll(".snd"),function(c){c.onchange=function(){S.sound=this.checked;Array.prototype.forEach.call(document.querySelectorAll(".snd"),function(d){d.checked=S.sound;});};});
+function updStart(){$("startBtn").textContent="Start routine ("+fmt(total())+")";}updStart();
+var last=performance.now();
+function tick(now){var dt=Math.min(.5,(now-last)/1000);last=now;S.anim+=dt;
+ if(S.screen==="list"){var m=moves[Math.floor(S.anim/6)%7];draw($("svgL"),m.id,S.anim,false);$("demoName").textContent=m.name;}
+ else if(S.screen==="done"){draw($("svgD"),"hip",0,false);}
+ else{
+  if(S.running){S.el+=dt;var st=S.steps[S.idx],left=st.dur-S.el,sec=Math.ceil(left);
+   if(sec<=3&&sec>=1&&sec!==S.lastBeep){S.lastBeep=sec;beep(660,.12);}
+   if(left<=0){beep(880,.35);go(S.idx+1);}}
+  if(S.screen==="play"){var c=S.steps[S.idx],mv=moves[c.move],resting=c.kind!=="work";
+   var done=0;for(var i=0;i<S.idx;i++)done+=S.steps[i].dur;done+=Math.min(S.el,c.dur);var T=total();
+   $("pName").textContent=mv.name;$("pSub").textContent="Move "+(c.move+1)+" of 7 · "+mv.pos;
+   $("pHead").textContent=resting?c.label:(c.side?c.side+" side · ":"")+c.label;
+   draw($("svgP"),c.kind==="rest"?"rest":mv.id,S.anim,c.side==="Left");
+   $("pTime").textContent=fmt(c.dur-S.el);
+   var nw=null;for(i=S.idx+1;i<S.steps.length;i++)if(S.steps[i].kind==="work"){nw=S.steps[i];break;}
+   $("pNext").textContent=resting?(nw?"Next: "+moves[nw.move].name+(nw.side?" · "+nw.side:""):"Last one"):(c.side?c.side+" side":"Breathe steadily");
+   $("pBar").style.width=Math.min(100,done/T*100)+"%";$("pStep").textContent="Step "+(S.idx+1)+" of "+S.steps.length;$("pLeft").textContent=fmt(T-done)+" left";
+   $("pause").textContent=S.running?"Pause":"Resume";$("prev").disabled=S.idx===0;$("pHow").textContent=mv.how;}
+ }
+ requestAnimationFrame(tick);}
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>
