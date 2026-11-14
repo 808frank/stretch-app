@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Stretches">
 <meta name="application-name" content="Stretches">
-<title>Morning Stretch and Plank Routine</title>
+<title>Stretches</title>
 <link rel="icon" id="ico">
 <link rel="apple-touch-icon" id="aico">
 <link rel="manifest" id="mani">
@@ -28,11 +28,55 @@ label{display:flex;gap:6px;align-items:center;font-size:15px}input[type=checkbox
 table{width:100%;border-collapse:collapse;font-size:14px}td,th{text-align:left;padding:8px 4px;border-bottom:1px solid var(--bd);vertical-align:top}
 .warn{border-left:4px solid var(--warn);padding:8px 12px;background:var(--card);border-radius:8px}
 .pic img,.pic video{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;transition:transform .3s}.hide{display:none}
+
+.mods{display:flex;flex-direction:column;gap:12px;margin:16px 0}.mod{display:block;width:100%;text-align:left;padding:16px}h1 .tiny,h2 .tiny{font-weight:500;color:var(--tx2);font-size:13px}
+.mod h2{margin:0 0 4px;font-size:18px}.mod p{margin:0}
+.back{min-width:0;padding:8px 12px;font-size:14px;margin:0 0 8px}
+.seg{display:flex;border:1px solid var(--bd);border-radius:12px;overflow:hidden;margin:8px 0 6px}
+.seg button{flex:1;border:0;border-radius:0;padding:10px 4px;min-width:0;font-size:14px}
+.seg button+button{border-left:1px solid var(--bd)}
+.seg button.on{background:var(--ink);color:#fff;font-weight:600}
+.weekline{display:flex;align-items:center;gap:12px;margin:8px 0 12px}
+.weekline .score{font-weight:700;font-variant-numeric:tabular-nums;min-width:3.2em}
+.calhead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:4px}
+.calhead button{min-width:44px;padding:8px 10px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:8px}
+.cal .dow{color:var(--tx2);font-size:11px;font-weight:600;text-align:center;padding:4px 0}
+.cal .cell{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:10px;font-size:13px;padding:0;min-width:0;border:0;background:transparent;color:var(--tx);font:inherit}
+.cal .cell.muted{color:var(--tx2);opacity:.4}
+.cal .cell.today{box-shadow:inset 0 0 0 2px var(--ink)}
+.cal .cell.hit{background:var(--far);font-weight:600}
+.cal .cell .n{font-size:10px;line-height:1;color:var(--ink);font-weight:700}
+.stretch{margin-bottom:14px}
+.howl{color:var(--tx2);font-size:14px}
+.foot{position:sticky;bottom:0;background:var(--bg);padding:10px 0 6px;margin-top:12px;border-top:1px solid var(--bd);z-index:2}
+a.ext{color:var(--ink)}
+.pic svg{display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:12px;background:var(--bg)}
+.lvl{font-size:13px;color:var(--tx2)}
+
 </style>
 </head>
 <body>
 <main>
-<section id="list">
+
+<section id="home">
+<h1>Stretches</h1>
+<p class="sub">Two routines you can run on the floor or around the house. Built to work well on a phone.</p>
+<div class="mods">
+<button class="card mod p" id="openMorning" type="button">
+<h2>Morning Stretch and Plank</h2>
+<p class="sub">About ten minutes on the floor: spine movement, three plank holds and three stretches.</p>
+</button>
+<button class="card mod" id="openDave" type="button">
+<h2>Dave's 5</h2>
+<p class="sub">Five stretches, 30 seconds each. Aim for 10 completions a week.</p>
+<p class="sub" id="homeDaveWeek" style="margin-top:8px;font-weight:600"></p>
+</button>
+</div>
+</section>
+
+<section id="list" class="hide">
+<button class="back" id="morningHome" type="button">All routines</button>
 <h1>Morning Stretch and Plank Routine</h1>
 <p class="sub">About ten minutes on the floor: spine movement, three plank holds and three stretches.</p>
 <div class="card"><div class="pic" id="svgL"></div><p class="sub" id="demoName" style="text-align:center"></p></div>
@@ -62,8 +106,82 @@ table{width:100%;border-collapse:collapse;font-size:14px}td,th{text-align:left;p
 <h1>Routine complete</h1><p class="sub">All seven moves done. Roll to your side and get up slowly.</p>
 <div class="card"><div class="pic" id="svgD"></div></div>
 <p id="dTot"></p>
-<div class="row"><button class="p" id="again">Do it again</button><button id="back">Back to routine</button></div>
+<div class="row"><button class="p" id="again">Do it again</button><button id="back">Back to routine</button><button id="morningHome2">All routines</button></div>
 </section>
+
+<section id="dave" class="hide">
+<button class="back" id="daveHome" type="button">All routines</button>
+<h1>Dave's 5</h1>
+<p class="sub">Five stretches, each held for 30 seconds. A full run of all five counts as one completion. The aim is 10 completions a week — for example two runs a day, Monday to Friday.</p>
+<p class="sub">From Movement by David's video <a class="ext" href="https://youtu.be/QaKuVOhikaY" target="_blank" rel="noopener noreferrer">Literally 5 Stretches is all you Need</a>.</p>
+
+<h2>This week</h2>
+<div class="card">
+<div class="weekline"><span class="score" id="daveWeekScore">0/10</span><div class="bar" style="flex:1;margin:0"><div id="daveWeekBar"></div></div></div>
+<p class="sub" id="daveWeekNote"></p>
+<div class="calhead">
+<button type="button" id="calPrev" aria-label="Previous month">‹</button>
+<h2 id="calTitle" style="margin:0;font-size:16px"></h2>
+<button type="button" id="calNext" aria-label="Next month">›</button>
+</div>
+<div class="cal" id="daveCal"></div>
+<p class="sub" id="calDayNote" style="margin-top:8px"></p>
+</div>
+<div class="row" style="margin-top:14px">
+<button class="p" id="daveStart" type="button">Start Dave's 5</button>
+<label><input type="checkbox" id="daveAuto" checked> Auto-advance</label>
+<label><input type="checkbox" class="snd" checked> Beep</label>
+</div>
+
+<h2>The stretches</h2>
+<div id="daveList"></div>
+<p class="sub">Bilateral stretches (figure four and hip flexor) use 30 seconds on each side. Finish: come out of the last stretch slowly.</p>
+<div class="row">
+<button class="p" id="daveStart2" type="button">Start Dave's 5</button>
+</div>
+<h2>When to stop</h2>
+<p class="warn"><b>Stop at once and get medical help</b> for chest pain or tightness, unusual breathlessness or dizziness.</p>
+<p class="sub">Sharp pain, or numbness or tingling: stop that stretch. The hardest lat version (feet up on the support, forearms on the floor) is advanced — skip it if it doesn’t feel controlled.</p>
+</section>
+
+<section id="davePlay" class="hide">
+<button class="back" id="davePlayExit" type="button">End</button>
+<p class="sub" id="dSub"></p>
+<h1 id="dName"></h1>
+<p class="lvl" id="dLvl"></p>
+<div class="card">
+<div class="pic" id="dPic"></div>
+<div class="timer" id="dTime">0:30</div>
+<p class="sub" style="text-align:center" id="dNext"></p>
+<div class="bar"><div id="dBar"></div></div>
+<div class="meta"><span id="dStep"></span><span id="dLeft"></span></div>
+</div>
+<div class="row">
+<button type="button" id="dPrev">Previous</button>
+<button class="p" type="button" id="dPause">Start</button>
+<button type="button" id="dReset">Reset</button>
+<button type="button" id="dNextBtn">Next</button>
+</div>
+<div id="dSeg" class="seg" role="radiogroup" aria-label="Difficulty"></div>
+<p id="dHow" class="howl"></p>
+<label><input type="checkbox" class="snd" checked> Beep</label>
+</section>
+
+<section id="daveDone" class="hide">
+<h1>Dave's 5 complete</h1>
+<p class="sub">That's one completion. Come out of the last stretch slowly.</p>
+<div class="card">
+<div class="weekline"><span class="score" id="daveDoneScore">0/10</span><div class="bar" style="flex:1;margin:0"><div id="daveDoneBar"></div></div></div>
+<p class="sub" id="daveDoneNote"></p>
+</div>
+<div class="row">
+<button class="p" id="daveAgain" type="button">Do it again</button>
+<button id="daveBack" type="button">Back to Dave's 5</button>
+<button id="daveUndo" type="button">Undo this completion</button>
+</div>
+<div class="row"><button id="daveDoneHome" type="button">All routines</button></div>
+</section>
+
 </main>
 <script>
 "use strict";
@@ -74,7 +192,7 @@ table{width:100%;border-collapse:collapse;font-size:14px}td,th{text-align:left;p
   var c=document.createElement('canvas');c.width=c.height=512;var png=ico;
   document.getElementById('ico').href=ico;
   function setMani(src){
-    var m={name:"Morning Stretch and Plank Routine",short_name:"Stretches",start_url:".",scope:".",display:"standalone",background_color:"#ffffff",theme_color:"#1d4ed8",
+    var m={name:"Stretches",short_name:"Stretches",start_url:".",scope:".",display:"standalone",background_color:"#ffffff",theme_color:"#1d4ed8",
       icons:[{src:src,sizes:"512x512",type:src.indexOf('image/png')>0?"image/png":"image/svg+xml",purpose:"any maskable"},{src:ico,sizes:"any",type:"image/svg+xml"}]};
     document.getElementById('mani').href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(m));
     document.getElementById('aico').href=src;
@@ -152,13 +270,19 @@ var actx=null;
 function beep(f,len){if(!S.sound)return;try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();var o=actx.createOscillator(),g=actx.createGain();o.frequency.value=f;g.gain.setValueAtTime(.15,actx.currentTime);g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+len);o.connect(g);g.connect(actx.destination);o.start();o.stop(actx.currentTime+len);}catch(e){}}
 var wl=null;
 function wake(on){try{if(on&&"wakeLock" in navigator&&!wl){navigator.wakeLock.request("screen").then(function(l){wl=l;l.addEventListener("release",function(){wl=null;});}).catch(function(){});}else if(!on&&wl){wl.release();wl=null;}}catch(e){}}
-document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"&&S.screen==="play")wake(true);});
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"&&(S.screen==="play"||S.screen==="davePlay"))wake(true);});
 function total(){return S.steps.reduce(function(a,s){return a+s.dur;},0);}
-function show(sc){S.screen=sc;["list","play","done"].forEach(function(x){$(x).classList.toggle("hide",x!==sc);});wake(sc==="play");window.scrollTo(0,0);}
+var SCREENS=["home","list","play","done","dave","davePlay","daveDone"];
+function show(sc){S.screen=sc;SCREENS.forEach(function(x){var n=$(x);if(n)n.classList.toggle("hide",x!==sc);});wake(sc==="play"||sc==="davePlay");window.scrollTo(0,0);}
+function goHome(){S.running=false;if(D)D.running=false;show("home");updHome();}
 function go(i){if(i>=S.steps.length){S.running=false;show("done");$("dTot").textContent="Total time "+fmt(total())+". Mild tightness is normal; sharp pain, leg numbness or an ache lasting over an hour means ease off that move.";beep(1046,.6);return;}
  S.idx=Math.max(0,i);S.el=0;S.lastBeep=-1;}
 function start(){S.steps=buildSteps($("gaps").checked);S.running=true;show("play");go(0);beep(880,.2);}
 $("startBtn").onclick=start;$("again").onclick=start;$("back").onclick=function(){show("list");};
+$("openMorning").onclick=function(){show("list");};
+$("openDave").onclick=function(){openDave();};
+$("morningHome").onclick=goHome;
+$("morningHome2").onclick=goHome;
 $("prev").onclick=function(){go(S.idx-1);};$("next").onclick=function(){go(S.idx+1);};
 $("pause").onclick=function(){S.running=!S.running;};$("end").onclick=function(){S.running=false;show("list");};
 $("gaps").onchange=function(){S.steps=buildSteps(this.checked);updStart();};
@@ -168,7 +292,8 @@ var last=performance.now();
 function tick(now){var dt=Math.min(.5,(now-last)/1000);last=now;S.anim+=dt;
  if(S.screen==="list"){var m=moves[Math.floor(S.anim/6)%7];draw($("svgL"),m.id,S.anim,false);$("demoName").textContent=m.name;}
  else if(S.screen==="done"){draw($("svgD"),"hip",0,false);}
- else{
+ else if(S.screen==="davePlay"){daveFrame(dt);}
+ else if(S.screen==="play"){
   if(S.running){S.el+=dt;var st=S.steps[S.idx],left=st.dur-S.el,sec=Math.ceil(left);
    if(sec<=3&&sec>=1&&sec!==S.lastBeep){S.lastBeep=sec;beep(660,.12);}
    if(left<=0){beep(880,.35);go(S.idx+1);}}
@@ -185,6 +310,357 @@ function tick(now){var dt=Math.min(.5,(now-last)/1000);last=now;S.anim+=dt;
  }
  requestAnimationFrame(tick);}
 requestAnimationFrame(tick);
+
+/* ========== Dave's 5 ========== */
+var LS_LEVELS="stretchApp.daves5.levels";
+var LS_LOG="stretchApp.daves5.completions";
+var LS_AUTO="stretchApp.daves5.autoAdvance";
+var LEVELS=["Easy","Difficult","Hard"];
+var daveStretches=[
+ {id:"pancake",name:"Pancake stretch",sides:0,pos:"Sitting, legs wide",
+  blurb:"Sit with your legs wide and fold forward. Higher is easier, lower is harder.",
+  how:{
+   Easy:"Sit on a cushion, a block or the edge of a chair so your pelvis is higher. Legs apart, keep a slight arch in your back, and reach forward to a support at the same height — a chair, a bench or a stack of books.",
+   Difficult:"Sit on the floor with your legs wide. Reach forward and rest on your fingers, then your elbows, then a “shaka” (hands on the floor, thumbs up) as you get lower.",
+   Hard:"Keep folding on the floor: rest on your fists, then forehead, chin, chest, and eventually your stomach, as if you were hugging the floor."
+  }},
+ {id:"fig4",name:"Figure four stretch",sides:2,pos:"Seated, then floor for the hard version",
+  blurb:"Cross one leg over the other and lean in until you feel it in the glute. Do both sides.",
+  how:{
+   Easy:"Cross one ankle over the opposite knee. If that bothers your knee, pull the knee toward your chest instead. If you can’t reach, loop a belt or band around the shin and gently pull, sneaking the foot a little out to the side. You should still feel it in the buttock.",
+   Difficult:"Sit on a bench or the floor and cross one ankle over the opposite knee. Lean forward until you feel a stretch in the crossed-side buttock.",
+   Hard:"Half pigeon on the floor — front shin across in front of you, back leg stretched behind. Work toward getting the hips fully flat. Support yourself with your hands as needed."
+  }},
+ {id:"hip",name:"Hip flexor stretch",sides:2,pos:"A lunge, hips facing forward",
+  blurb:"A lunge that opens the front of the hip. Keep the hips pointing forward. Do both sides.",
+  how:{
+   Easy:"Step into a short lunge with the hips a little higher, and hold a chair or the wall for balance. You can look up to feel the stretch through the front of the hip. Don’t let the back foot roll in or the hips twist out.",
+   Difficult:"In a lunge, sink the hips down. Keep both hips pointing straight forward — force it if you have to — and don’t let the back foot collapse inward.",
+   Hard:"From the same lunge, reach the arm on the back-leg side up and over. Feel the stretch travel from the hip up into the abs. Take small sips of breath if it feels intense."
+  }},
+ {id:"jack",name:"Jack stretch",sides:0,pos:"Standing, broom or belt across the shoulders",
+  blurb:"A chest opener with a broom, a stick or a belt. A wide grip is easier, a narrow grip is harder.",
+  how:{
+   Easy:"Rest a broom, a stick or a belt across the back of your shoulders. Take a wide grip, lift the chest, and gently press the bar backwards until you feel a stretch across the front of the chest (and maybe the biceps).",
+   Difficult:"Same setup with a medium-width grip. Chest out, press the bar back, and hold.",
+   Hard:"Bring the hands in to a narrow grip and press the bar back. This is considerably stronger. A belt works in the same way if you don’t have a broom."
+  }},
+ {id:"lat",name:"Lat stretch",sides:0,pos:"Standing, hands or elbows on a counter or fence",
+  blurb:"A forward lat stretch on a counter, table or fence. The lower your chest drops, the harder it is.",
+  how:{
+   Easy:"Stand facing a kitchen counter, table or fence. Place your hands on it, walk your hips back, and let your chest drop until you feel a stretch down the sides of your back. Keep the torso higher.",
+   Difficult:"Place your elbows or forearms on the support and drop the chest further, walking the feet back as needed.",
+   Hard:"Keep dropping the chest well below the support. The hardest version in the video puts the feet up on the counter or fence and the forearms on the floor, in a back-arching hang — only go there if it feels controlled and comfortable."
+  }}
+];
+
+function daveSvg(id,level){
+  var ink="var(--ink)", skin="#e0b08a", cloth="#1d4ed8", dark="#111";
+  var deep=level==="Hard"?1:level==="Difficult"?0.55:0.2;
+  var g='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225" role="img" aria-hidden="true">';
+  g+='<rect width="400" height="225" rx="12" fill="var(--card)"/>';
+  function head(x,y){return '<circle cx="'+x+'" cy="'+y+'" r="14" fill="'+skin+'"/>';}
+  function shorts(x,y,w,h,rot){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="4" fill="'+cloth+'"'+(rot?' transform="rotate('+rot+' '+(x+w/2)+' '+(y+h/2)+')"':'')+'/>';}
+  if(id==="pancake"){
+    var fold=28+deep*42;
+    var hx=200, hy=86+fold*0.25, tx=200, ty=120+fold*0.15;
+    g+='<line x1="70" y1="188" x2="330" y2="188" stroke="var(--bd)" stroke-width="6" stroke-linecap="round"/>';
+    g+='<line x1="'+tx+'" y1="'+ty+'" x2="88" y2="188" stroke="'+skin+'" stroke-width="12" stroke-linecap="round"/>';
+    g+='<line x1="'+tx+'" y1="'+ty+'" x2="312" y2="188" stroke="'+skin+'" stroke-width="12" stroke-linecap="round"/>';
+    g+='<rect x="182" y="'+(ty-8)+'" width="36" height="28" rx="6" fill="'+cloth+'"/>';
+    g+='<line x1="'+tx+'" y1="'+ty+'" x2="'+hx+'" y2="'+hy+'" stroke="'+cloth+'" stroke-width="18" stroke-linecap="round"/>';
+    g+=head(hx,hy-16);
+    var reach=hy+20+deep*18;
+    g+='<line x1="'+(hx-10)+'" y1="'+hy+'" x2="'+(160-deep*20)+'" y2="'+reach+'" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
+    g+='<line x1="'+(hx+10)+'" y1="'+hy+'" x2="'+(240+deep*20)+'" y2="'+reach+'" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
+  }else if(id==="fig4"){
+    g+='<line x1="60" y1="170" x2="340" y2="170" stroke="var(--bd)" stroke-width="10" stroke-linecap="round"/>';
+    var lean=deep*22;
+    g+='<rect x="'+(168+lean)+'" y="118" width="44" height="36" rx="6" fill="'+cloth+'"/>';
+    g+='<line x1="'+(190+lean)+'" y1="120" x2="'+(190+lean)+'" y2="'+(86-lean*0.3)+'" stroke="'+cloth+'" stroke-width="16" stroke-linecap="round"/>';
+    g+=head(190+lean,70-lean*0.3);
+    g+='<line x1="'+(175+lean)+'" y1="150" x2="130" y2="170" stroke="'+skin+'" stroke-width="11" stroke-linecap="round"/>';
+    g+='<line x1="'+(205+lean)+'" y1="148" x2="'+(250-lean)+'" y2="128" stroke="'+skin+'" stroke-width="11" stroke-linecap="round"/>';
+    g+='<line x1="'+(250-lean)+'" y1="128" x2="'+(200+lean)+'" y2="150" stroke="'+skin+'" stroke-width="10" stroke-linecap="round"/>';
+    g+='<line x1="'+(200+lean)+'" y1="100" x2="'+(150+lean*0.5)+'" y2="'+(150-lean)+'" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
+  }else if(id==="hip"){
+    var sink=deep*18;
+    g+='<line x1="40" y1="200" x2="360" y2="200" stroke="var(--bd)" stroke-width="6" stroke-linecap="round"/>';
+    g+='<line x1="150" y1="200" x2="170" y2="'+(130+sink)+'" stroke="'+skin+'" stroke-width="12" stroke-linecap="round"/>';
+    g+='<line x1="170" y1="'+(130+sink)+'" x2="250" y2="200" stroke="'+skin+'" stroke-width="12" stroke-linecap="round"/>';
+    g+='<rect x="156" y="'+(118+sink)+'" width="40" height="30" rx="6" fill="'+cloth+'"/>';
+    g+='<line x1="176" y1="'+(122+sink)+'" x2="176" y2="'+(78+sink)+'" stroke="'+cloth+'" stroke-width="16" stroke-linecap="round"/>';
+    g+=head(176,62+sink);
+    if(level==="Hard"){
+      g+='<line x1="176" y1="'+(90+sink)+'" x2="230" y2="'+(40+sink)+'" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
+      g+='<line x1="176" y1="'+(95+sink)+'" x2="150" y2="'+(120+sink)+'" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
+    }else{
+      g+='<line x1="176" y1="'+(95+sink)+'" x2="150" y2="'+(130+sink)+'" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
+      g+='<line x1="176" y1="'+(95+sink)+'" x2="200" y2="'+(130+sink)+'" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
+    }
+  }else if(id==="jack"){
+    var grip=level==="Hard"?36:level==="Difficult"?70:110;
+    g+='<line x1="40" y1="200" x2="360" y2="200" stroke="var(--bd)" stroke-width="6" stroke-linecap="round"/>';
+    g+='<line x1="200" y1="200" x2="200" y2="128" stroke="'+skin+'" stroke-width="12" stroke-linecap="round"/>';
+    g+='<rect x="182" y="118" width="36" height="28" rx="6" fill="'+cloth+'"/>';
+    g+='<line x1="200" y1="118" x2="200" y2="78" stroke="'+cloth+'" stroke-width="16" stroke-linecap="round"/>';
+    g+=head(200,62);
+    g+='<line x1="'+(200-grip)+'" y1="92" x2="'+(200+grip)+'" y2="92" stroke="'+dark+'" stroke-width="6" stroke-linecap="round"/>';
+    g+='<line x1="200" y1="100" x2="'+(200-grip)+'" y2="92" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
+    g+='<line x1="200" y1="100" x2="'+(200+grip)+'" y2="92" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
+  }else if(id==="lat"){
+    var drop=26+deep*50;
+    g+='<rect x="40" y="70" width="90" height="14" rx="3" fill="var(--bd)"/>';
+    g+='<rect x="40" y="84" width="18" height="116" fill="var(--bd)"/>';
+    g+='<line x1="40" y1="200" x2="360" y2="200" stroke="var(--bd)" stroke-width="6" stroke-linecap="round"/>';
+    if(level==="Hard"){
+      g+='<line x1="200" y1="70" x2="200" y2="200" stroke="transparent"/>';
+      g+='<line x1="110" y1="78" x2="200" y2="70" stroke="'+skin+'" stroke-width="11" stroke-linecap="round"/>';
+      g+='<rect x="184" y="86" width="36" height="30" rx="6" fill="'+cloth+'"/>';
+      g+='<line x1="200" y1="116" x2="200" y2="168" stroke="'+cloth+'" stroke-width="16" stroke-linecap="round"/>';
+      g+=head(200,186);
+      g+='<line x1="200" y1="100" x2="118" y2="78" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
+    }else{
+      var hx=210, hy=90+drop*0.35, hx2=120, hy2=78;
+      g+='<line x1="230" y1="200" x2="210" y2="'+(130+drop*0.2)+'" stroke="'+skin+'" stroke-width="12" stroke-linecap="round"/>';
+      g+='<rect x="190" y="'+(118+drop*0.2)+'" width="36" height="28" rx="6" fill="'+cloth+'"/>';
+      g+='<line x1="208" y1="'+(120+drop*0.2)+'" x2="'+(160)+'" y2="'+(86+drop*0.15)+'" stroke="'+cloth+'" stroke-width="16" stroke-linecap="round"/>';
+      g+=head(148,76+drop*0.12);
+      g+='<line x1="170" y1="'+(96+drop*0.15)+'" x2="118" y2="78" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
+    }
+  }
+  g+='</svg>';
+  return g;
+}
+
+function loadLevels(){
+  var o={pancake:"Easy",fig4:"Easy",hip:"Easy",jack:"Easy",lat:"Easy"};
+  try{var s=JSON.parse(localStorage.getItem(LS_LEVELS)||"{}");LEVELS.forEach(function(){});daveStretches.forEach(function(st){if(s[st.id]&&LEVELS.indexOf(s[st.id])>=0)o[st.id]=s[st.id];});}catch(e){}
+  return o;
+}
+function saveLevels(){try{localStorage.setItem(LS_LEVELS,JSON.stringify(D.levels));}catch(e){}}
+function loadLog(){
+  try{var a=JSON.parse(localStorage.getItem(LS_LOG)||"[]");return Array.isArray(a)?a.filter(function(x){return typeof x==="string"||(x&&x.at);}):[];}catch(e){return [];}
+}
+function saveLog(){try{localStorage.setItem(LS_LOG,JSON.stringify(D.log));}catch(e){}}
+function isoNow(){return new Date().toISOString();}
+function localDate(iso){
+  var d=new Date(iso);
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+function startOfWeek(d){
+  var x=new Date(d.getFullYear(),d.getMonth(),d.getDate());
+  var day=x.getDay();
+  x.setDate(x.getDate()+(day===0?-6:1-day));
+  return x;
+}
+function sameDay(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate();}
+function weekCount(ref){
+  var s=startOfWeek(ref||new Date()), e=new Date(s);e.setDate(s.getDate()+7);
+  var n=0;
+  D.log.forEach(function(iso){var d=new Date(iso);if(d>=s&&d<e)n++;});
+  return n;
+}
+function dayCount(ymd){
+  var n=0;D.log.forEach(function(iso){if(localDate(iso)===ymd)n++;});return n;
+}
+
+var D={screen:"dave",idx:0,side:0,el:0,running:false,ended:false,auto:true,lastBeep:-1,hold:30,levels:loadLevels(),log:loadLog(),cal:new Date(),justLogged:null};
+
+try{var au=localStorage.getItem(LS_AUTO);if(au==="0")D.auto=false;if(au==="1")D.auto=true;}catch(e){}
+
+function daveUnits(){
+  var u=[];
+  daveStretches.forEach(function(st,i){
+    if(st.sides===2){u.push({si:i,side:"Right"});u.push({si:i,side:"Left"});}
+    else u.push({si:i,side:""});
+  });
+  return u;
+}
+function daveTotal(){return daveUnits().length*D.hold;}
+
+function setLevel(id,lv){D.levels[id]=lv;saveLevels();renderDaveList();if(S.screen==="davePlay")renderDavePlay(false);}
+function segHtml(id,lv){
+  return LEVELS.map(function(L){return '<button type="button" class="'+(L===lv?"on":"")+'" data-id="'+id+'" data-lv="'+L+'" role="radio" aria-checked="'+(L===lv?"true":"false")+'">'+L+"</button>";}).join("");
+}
+
+function renderDaveList(){
+  var html="";
+  daveStretches.forEach(function(st,i){
+    var lv=D.levels[st.id];
+    html+='<div class="card stretch" data-stretch="'+st.id+'">';
+    html+='<div class="pic">'+daveSvg(st.id,lv)+"</div>";
+    html+="<h2 style=\"margin:10px 0 0\">"+(i+1)+". "+st.name+"</h2>";
+    html+='<p class="sub">'+st.pos+(st.sides===2?" · 30 s each side":" · 30 s")+"</p>";
+    html+='<div class="seg" role="radiogroup" aria-label="Difficulty for '+st.name+'">'+segHtml(st.id,lv)+"</div>";
+    html+='<p class="howl">'+st.how[lv]+"</p></div>";
+  });
+  $("daveList").innerHTML=html;
+  Array.prototype.forEach.call($("daveList").querySelectorAll(".seg button"),function(b){
+    b.onclick=function(){setLevel(b.getAttribute("data-id"),b.getAttribute("data-lv"));};
+  });
+  renderCalendar();
+}
+
+function monName(d){return d.toLocaleString("en-AU",{month:"long",year:"numeric"});}
+function renderCalendar(){
+  var now=new Date(), n=weekCount(now), pct=Math.min(100,n/10*100);
+  $("daveWeekScore").textContent=n+"/10";
+  $("daveWeekBar").style.width=pct+"%";
+  var s=startOfWeek(now), e=new Date(s);e.setDate(s.getDate()+6);
+  var fmt=function(d){return d.toLocaleString("en-AU",{day:"numeric",month:"short"});};
+  $("daveWeekNote").textContent="Week of "+fmt(s)+"–"+fmt(e)+(n>=10?" — week’s goal reached.":" — "+(10-n)+" to go.");
+  if($("homeDaveWeek")) $("homeDaveWeek").textContent="This week "+n+"/10";
+  if($("daveDoneScore")){$("daveDoneScore").textContent=n+"/10";$("daveDoneBar").style.width=pct+"%";$("daveDoneNote").textContent=$("daveWeekNote").textContent;}
+
+  var y=D.cal.getFullYear(), m=D.cal.getMonth();
+  $("calTitle").textContent=monName(new Date(y,m,1));
+  var first=new Date(y,m,1), start=startOfWeek(first), html="";
+  ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].forEach(function(d){html+='<div class="dow">'+d+"</div>";});
+  for(var i=0;i<42;i++){
+    var d=new Date(start);d.setDate(start.getDate()+i);
+    var ymd=localDate(d.toISOString().slice(0,10)+"T12:00:00"); // safer local
+    ymd=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+    var c=dayCount(ymd), mute=d.getMonth()!==m, cls="cell"+(mute?" muted":"")+(sameDay(d,now)?" today":"")+(c?" hit":"");
+    html+='<button type="button" class="'+cls+'" data-ymd="'+ymd+'" aria-label="'+ymd+(c?" · "+c+" completion"+(c>1?"s":""):"")+'">'+d.getDate()+(c?'<span class="n">'+c+"</span>":"")+"</button>";
+  }
+  $("daveCal").innerHTML=html;
+  Array.prototype.forEach.call($("daveCal").querySelectorAll("button"),function(b){
+    b.onclick=function(){
+      var ymd=b.getAttribute("data-ymd"), c=dayCount(ymd);
+      var parts=ymd.split("-");
+      var label=new Date(+parts[0],+parts[1]-1,+parts[2]).toLocaleString("en-AU",{weekday:"short",day:"numeric",month:"short"});
+      $("calDayNote").textContent=c?label+": "+c+" completion"+(c>1?"s":"")+".":label+": no completions.";
+    };
+  });
+}
+
+function updHome(){if($("homeDaveWeek"))$("homeDaveWeek").textContent="This week "+weekCount(new Date())+"/10";}
+
+function openDave(){
+  renderDaveList();
+  $("daveAuto").checked=D.auto;
+  show("dave");
+}
+
+function daveBuzz(){
+  if(S.sound)beep(880,.35);
+  try{if(navigator.vibrate)navigator.vibrate([200,80,200]);}catch(e){}
+}
+
+function daveGo(i,keep){
+  var units=daveUnits();
+  if(i>=units.length){daveFinish();return;}
+  D.idx=Math.max(0,i);D.el=keep?D.el:0;D.lastBeep=-1;D.ended=false;
+  if(!keep)D.running=false;
+  renderDavePlay(true);
+}
+
+function daveFinish(){
+  D.running=false;
+  var at=isoNow();
+  D.log.push(at);saveLog();D.justLogged=at;
+  renderCalendar();
+  show("daveDone");
+  daveBuzz();
+  beep(1046,.6);
+}
+
+var davePaintKey="";
+function renderDavePlay(force){
+  var units=daveUnits(), u=units[D.idx], st=daveStretches[u.si], lv=D.levels[st.id];
+  var key=D.idx+"|"+u.si+"|"+u.side+"|"+lv;
+  if(force||key!==davePaintKey){
+    davePaintKey=key;
+    $("dName").textContent=st.name;
+    $("dSub").textContent="Stretch "+(u.si+1)+" of 5 · "+st.pos;
+    $("dLvl").textContent=(u.side?u.side+" side · ":"")+lv;
+    $("dPic").innerHTML=daveSvg(st.id,lv);
+    $("dHow").textContent=st.how[lv];
+    $("dSeg").innerHTML=segHtml(st.id,lv);
+    Array.prototype.forEach.call($("dSeg").querySelectorAll("button"),function(b){
+      b.onclick=function(){setLevel(st.id,b.getAttribute("data-lv"));};
+    });
+  }
+  var left=Math.max(0,D.hold-D.el);
+  $("dTime").textContent=fmt(left);
+  $("dBar").style.width=Math.min(100,(D.el/D.hold)*100)+"%";
+  var done=D.idx*D.hold+Math.min(D.el,D.hold), T=daveTotal();
+  $("dStep").textContent="Hold "+(D.idx+1)+" of "+units.length;
+  $("dLeft").textContent=fmt(T-done)+" left";
+  var next=units[D.idx+1];
+  $("dNext").textContent=next?("Next: "+daveStretches[next.si].name+(next.side?" · "+next.side:"")):"Last hold — then you’re done";
+  $("dPause").textContent=D.running?"Pause":((D.ended||D.el>=D.hold||!D.el)?"Start":"Resume");
+  $("dPrev").disabled=D.idx===0&&D.el===0;
+  $("dNextBtn").disabled=false;
+  $("dNextBtn").textContent=next?"Next":"Finish";
+}
+
+function daveFrame(dt){
+  if(S.screen!=="davePlay")return;
+  if(D.running&&!D.ended){
+    D.el+=dt;
+    var left=D.hold-D.el, sec=Math.ceil(left);
+    if(sec<=3&&sec>=1&&sec!==D.lastBeep){D.lastBeep=sec;beep(660,.12);}
+    if(left<=0){
+      D.el=D.hold;D.running=false;D.ended=true;daveBuzz();
+      renderDavePlay();
+      if(D.auto){
+        setTimeout(function(){
+          if(S.screen==="davePlay"&&D.ended){D.ended=false;daveGo(D.idx+1);D.running=true;renderDavePlay(true);}
+        },700);
+      }
+      return;
+    }
+  }
+  renderDavePlay();
+}
+
+function startDave(){
+  D.idx=0;D.el=0;D.running=true;D.lastBeep=-1;D.ended=false;
+  show("davePlay");renderDavePlay(true);beep(880,.2);
+}
+
+$("daveStart").onclick=startDave;
+$("daveStart2").onclick=startDave;
+$("daveAgain").onclick=startDave;
+$("daveBack").onclick=function(){D.running=false;openDave();};
+$("daveHome").onclick=goHome;
+$("daveDoneHome").onclick=goHome;
+$("davePlayExit").onclick=function(){D.running=false;openDave();};
+$("daveAuto").onchange=function(){D.auto=this.checked;try{localStorage.setItem(LS_AUTO,D.auto?"1":"0");}catch(e){}};
+$("calPrev").onclick=function(){D.cal=new Date(D.cal.getFullYear(),D.cal.getMonth()-1,1);renderCalendar();};
+$("calNext").onclick=function(){D.cal=new Date(D.cal.getFullYear(),D.cal.getMonth()+1,1);renderCalendar();};
+$("dPause").onclick=function(){
+  if(D.el>=D.hold||D.ended){D.el=0;D.ended=false;D.running=true;}
+  else D.running=!D.running;
+  if(D.running){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();if(actx.resume)actx.resume();}catch(e){}}
+  renderDavePlay();
+};
+$("dReset").onclick=function(){D.el=0;D.running=false;D.lastBeep=-1;D.ended=false;renderDavePlay();};
+$("dPrev").onclick=function(){D.running=false;if(D.el>1)daveGo(D.idx);else daveGo(D.idx-1);};
+$("dNextBtn").onclick=function(){D.running=D.auto;daveGo(D.idx+1);if(D.auto)D.running=true;renderDavePlay();};
+$("daveUndo").onclick=function(){
+  if(!D.justLogged)return;
+  var i=D.log.lastIndexOf(D.justLogged);
+  if(i>=0){D.log.splice(i,1);saveLog();}
+  D.justLogged=null;
+  renderCalendar();
+  $("daveDoneNote").textContent="Completion removed. This week "+weekCount(new Date())+"/10.";
+};
+
+// Start on the home screen, not the morning list
+show("home");
+updHome();
+
+window.__stretchApp={
+  show:show, startDave:startDave, daveFinish:function(){daveFinish();},
+  getD:function(){return D;}, getS:function(){return S;},
+  setElapsed:function(s){D.el=s;},
+  weekCount:weekCount, dayCount:dayCount, loadLog:loadLog,
+  completeFast:function(){D.idx=daveUnits().length-1;D.el=D.hold;daveFinish();}
+};
+
 </script>
 </body>
 </html>
