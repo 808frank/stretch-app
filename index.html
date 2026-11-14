@@ -52,7 +52,7 @@ table{width:100%;border-collapse:collapse;font-size:14px}td,th{text-align:left;p
 .foot{position:sticky;bottom:0;background:var(--bg);padding:10px 0 6px;margin-top:12px;border-top:1px solid var(--bd);z-index:2}
 a.ext{color:var(--ink)}
 .pic svg{display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:12px;background:var(--bg)}
-#dave .pic img,#davePlay .pic img{width:100%;height:auto;aspect-ratio:auto;object-fit:contain;background:var(--card)}
+#dave .pic img,#davePlay .pic img,#dave .pic video,#davePlay .pic video{width:100%;height:auto;aspect-ratio:auto;object-fit:contain;background:var(--card)}
 .lvl{font-size:13px;color:var(--tx2)}
 
 </style>
@@ -363,11 +363,24 @@ var DAVE_IMG={
   jack:{Easy:"media/dave-jack-easy.jpg",Difficult:"media/dave-jack-difficult.jpg",Hard:"media/dave-jack-hard.jpg"},
   lat:{Easy:"media/dave-lat-easy.jpg",Difficult:"media/dave-lat-difficult.jpg",Hard:"media/dave-lat-hard.jpg"}
 };
+var DAVE_VID={hip:"media/dave-hip.mp4"};
+function davePoster(id,level){
+  return (DAVE_IMG[id]&&(DAVE_IMG[id][level]||DAVE_IMG[id].Easy))||"";
+}
 function davePic(id,level){
-  var src=(DAVE_IMG[id]&&DAVE_IMG[id][level])||(DAVE_IMG[id]&&DAVE_IMG[id].Easy)||"";
   var st=daveStretches.filter(function(s){return s.id===id;})[0];
   var alt=(st?st.name:"Stretch")+" — "+level;
-  return '<img src="'+src+'" alt="'+alt+'" width="900" height="506">';
+  var poster=davePoster(id,level);
+  if(DAVE_VID[id]){
+    return '<video src="'+DAVE_VID[id]+'" poster="'+poster+'" muted loop autoplay playsinline width="848" height="480" aria-label="Trainer demonstrating '+alt+'"></video>';
+  }
+  return '<img src="'+poster+'" alt="'+alt+'" width="900" height="506">';
+}
+function daveKickMedia(root){
+  Array.prototype.forEach.call((root||document).querySelectorAll("video"),function(v){
+    v.muted=true;v.defaultMuted=true;v.playsInline=true;
+    var p=v.play();if(p&&p.catch)p.catch(function(){});
+  });
 }
 
 function loadLevels(){
@@ -416,7 +429,35 @@ function daveUnits(){
 }
 function daveTotal(){return daveUnits().length*D.hold;}
 
-function setLevel(id,lv){D.levels[id]=lv;saveLevels();renderDaveList();if(S.screen==="davePlay")renderDavePlay(false);}
+function setLevel(id,lv){D.levels[id]=lv;saveLevels();updateDaveLevelUI(id,lv);if(S.screen==="davePlay")renderDavePlay(false);}
+function updateDaveLevelUI(id,lv){
+  var roots=[];
+  if($("daveList"))roots.push($("daveList"));
+  if($("davePlay"))roots.push($("davePlay"));
+  roots.forEach(function(root){
+    var card=root.querySelector('.stretch[data-stretch="'+id+'"]')||(root.id==="davePlay"?root:null);
+    if(!card)return;
+    var seg=card.querySelector(".seg")||(card.id==="davePlay"?$("dSeg"):null);
+    var how=card.querySelector(".howl")||(card.id==="davePlay"?$("dHow"):null);
+    if(seg){
+      seg.innerHTML=segHtml(id,lv);
+      Array.prototype.forEach.call(seg.querySelectorAll("button"),function(b){
+        b.onclick=function(){setLevel(b.getAttribute("data-id")||id,b.getAttribute("data-lv"));};
+      });
+    }
+    if(how)how.textContent=daveStretches.filter(function(s){return s.id===id;})[0].how[lv];
+    var pic=card.querySelector(".pic")||(card.id==="davePlay"?$("dPic"):null);
+    if(pic&&!DAVE_VID[id])pic.innerHTML=davePic(id,lv);
+    else if(pic&&DAVE_VID[id]){
+      var v=pic.querySelector("video");
+      if(v){
+        var st=daveStretches.filter(function(s){return s.id===id;})[0];
+        v.setAttribute("aria-label","Trainer demonstrating "+((st&&st.name)||"Stretch")+" — "+lv);
+        v.setAttribute("poster",davePoster(id,lv));
+      }
+    }
+  });
+}
 function segHtml(id,lv){
   return LEVELS.map(function(L){return '<button type="button" class="'+(L===lv?"on":"")+'" data-id="'+id+'" data-lv="'+L+'" role="radio" aria-checked="'+(L===lv?"true":"false")+'">'+L+"</button>";}).join("");
 }
@@ -436,6 +477,7 @@ function renderDaveList(){
   Array.prototype.forEach.call($("daveList").querySelectorAll(".seg button"),function(b){
     b.onclick=function(){setLevel(b.getAttribute("data-id"),b.getAttribute("data-lv"));};
   });
+  daveKickMedia($("daveList"));
   renderCalendar();
 }
 
@@ -512,7 +554,8 @@ function renderDavePlay(force){
     $("dName").textContent=st.name;
     $("dSub").textContent="Stretch "+(u.si+1)+" of 5 · "+st.pos;
     $("dLvl").textContent=(u.side?u.side+" side · ":"")+lv;
-    $("dPic").innerHTML=davePic(st.id,lv);
+    var keep=DAVE_VID[st.id]&&$("dPic").querySelector("video")&&$("dPic").querySelector("video").getAttribute("src")===DAVE_VID[st.id];
+    if(!keep){$("dPic").innerHTML=davePic(st.id,lv);daveKickMedia($("dPic"));}
     $("dHow").textContent=st.how[lv];
     $("dSeg").innerHTML=segHtml(st.id,lv);
     Array.prototype.forEach.call($("dSeg").querySelectorAll("button"),function(b){
