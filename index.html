@@ -52,6 +52,7 @@ table{width:100%;border-collapse:collapse;font-size:14px}td,th{text-align:left;p
 .foot{position:sticky;bottom:0;background:var(--bg);padding:10px 0 6px;margin-top:12px;border-top:1px solid var(--bd);z-index:2}
 a.ext{color:var(--ink)}
 .pic svg{display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:12px;background:var(--bg)}
+#dave .pic img,#davePlay .pic img{width:100%;height:auto;aspect-ratio:auto;object-fit:contain;background:var(--card)}
 .lvl{font-size:13px;color:var(--tx2)}
 
 </style>
@@ -354,83 +355,19 @@ var daveStretches=[
   }}
 ];
 
-function daveSvg(id,level){
-  var ink="var(--ink)", skin="#e0b08a", cloth="#1d4ed8", dark="#111";
-  var deep=level==="Hard"?1:level==="Difficult"?0.55:0.2;
-  var g='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225" role="img" aria-hidden="true">';
-  g+='<rect width="400" height="225" rx="12" fill="var(--card)"/>';
-  function head(x,y){return '<circle cx="'+x+'" cy="'+y+'" r="14" fill="'+skin+'"/>';}
-  function shorts(x,y,w,h,rot){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="4" fill="'+cloth+'"'+(rot?' transform="rotate('+rot+' '+(x+w/2)+' '+(y+h/2)+')"':'')+'/>';}
-  if(id==="pancake"){
-    var fold=28+deep*42;
-    var hx=200, hy=86+fold*0.25, tx=200, ty=120+fold*0.15;
-    g+='<line x1="70" y1="188" x2="330" y2="188" stroke="var(--bd)" stroke-width="6" stroke-linecap="round"/>';
-    g+='<line x1="'+tx+'" y1="'+ty+'" x2="88" y2="188" stroke="'+skin+'" stroke-width="12" stroke-linecap="round"/>';
-    g+='<line x1="'+tx+'" y1="'+ty+'" x2="312" y2="188" stroke="'+skin+'" stroke-width="12" stroke-linecap="round"/>';
-    g+='<rect x="182" y="'+(ty-8)+'" width="36" height="28" rx="6" fill="'+cloth+'"/>';
-    g+='<line x1="'+tx+'" y1="'+ty+'" x2="'+hx+'" y2="'+hy+'" stroke="'+cloth+'" stroke-width="18" stroke-linecap="round"/>';
-    g+=head(hx,hy-16);
-    var reach=hy+20+deep*18;
-    g+='<line x1="'+(hx-10)+'" y1="'+hy+'" x2="'+(160-deep*20)+'" y2="'+reach+'" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
-    g+='<line x1="'+(hx+10)+'" y1="'+hy+'" x2="'+(240+deep*20)+'" y2="'+reach+'" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
-  }else if(id==="fig4"){
-    g+='<line x1="60" y1="170" x2="340" y2="170" stroke="var(--bd)" stroke-width="10" stroke-linecap="round"/>';
-    var lean=deep*22;
-    g+='<rect x="'+(168+lean)+'" y="118" width="44" height="36" rx="6" fill="'+cloth+'"/>';
-    g+='<line x1="'+(190+lean)+'" y1="120" x2="'+(190+lean)+'" y2="'+(86-lean*0.3)+'" stroke="'+cloth+'" stroke-width="16" stroke-linecap="round"/>';
-    g+=head(190+lean,70-lean*0.3);
-    g+='<line x1="'+(175+lean)+'" y1="150" x2="130" y2="170" stroke="'+skin+'" stroke-width="11" stroke-linecap="round"/>';
-    g+='<line x1="'+(205+lean)+'" y1="148" x2="'+(250-lean)+'" y2="128" stroke="'+skin+'" stroke-width="11" stroke-linecap="round"/>';
-    g+='<line x1="'+(250-lean)+'" y1="128" x2="'+(200+lean)+'" y2="150" stroke="'+skin+'" stroke-width="10" stroke-linecap="round"/>';
-    g+='<line x1="'+(200+lean)+'" y1="100" x2="'+(150+lean*0.5)+'" y2="'+(150-lean)+'" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
-  }else if(id==="hip"){
-    var sink=deep*18;
-    g+='<line x1="40" y1="200" x2="360" y2="200" stroke="var(--bd)" stroke-width="6" stroke-linecap="round"/>';
-    g+='<line x1="150" y1="200" x2="170" y2="'+(130+sink)+'" stroke="'+skin+'" stroke-width="12" stroke-linecap="round"/>';
-    g+='<line x1="170" y1="'+(130+sink)+'" x2="250" y2="200" stroke="'+skin+'" stroke-width="12" stroke-linecap="round"/>';
-    g+='<rect x="156" y="'+(118+sink)+'" width="40" height="30" rx="6" fill="'+cloth+'"/>';
-    g+='<line x1="176" y1="'+(122+sink)+'" x2="176" y2="'+(78+sink)+'" stroke="'+cloth+'" stroke-width="16" stroke-linecap="round"/>';
-    g+=head(176,62+sink);
-    if(level==="Hard"){
-      g+='<line x1="176" y1="'+(90+sink)+'" x2="230" y2="'+(40+sink)+'" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
-      g+='<line x1="176" y1="'+(95+sink)+'" x2="150" y2="'+(120+sink)+'" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
-    }else{
-      g+='<line x1="176" y1="'+(95+sink)+'" x2="150" y2="'+(130+sink)+'" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
-      g+='<line x1="176" y1="'+(95+sink)+'" x2="200" y2="'+(130+sink)+'" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
-    }
-  }else if(id==="jack"){
-    var grip=level==="Hard"?36:level==="Difficult"?70:110;
-    g+='<line x1="40" y1="200" x2="360" y2="200" stroke="var(--bd)" stroke-width="6" stroke-linecap="round"/>';
-    g+='<line x1="200" y1="200" x2="200" y2="128" stroke="'+skin+'" stroke-width="12" stroke-linecap="round"/>';
-    g+='<rect x="182" y="118" width="36" height="28" rx="6" fill="'+cloth+'"/>';
-    g+='<line x1="200" y1="118" x2="200" y2="78" stroke="'+cloth+'" stroke-width="16" stroke-linecap="round"/>';
-    g+=head(200,62);
-    g+='<line x1="'+(200-grip)+'" y1="92" x2="'+(200+grip)+'" y2="92" stroke="'+dark+'" stroke-width="6" stroke-linecap="round"/>';
-    g+='<line x1="200" y1="100" x2="'+(200-grip)+'" y2="92" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
-    g+='<line x1="200" y1="100" x2="'+(200+grip)+'" y2="92" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
-  }else if(id==="lat"){
-    var drop=26+deep*50;
-    g+='<rect x="40" y="70" width="90" height="14" rx="3" fill="var(--bd)"/>';
-    g+='<rect x="40" y="84" width="18" height="116" fill="var(--bd)"/>';
-    g+='<line x1="40" y1="200" x2="360" y2="200" stroke="var(--bd)" stroke-width="6" stroke-linecap="round"/>';
-    if(level==="Hard"){
-      g+='<line x1="200" y1="70" x2="200" y2="200" stroke="transparent"/>';
-      g+='<line x1="110" y1="78" x2="200" y2="70" stroke="'+skin+'" stroke-width="11" stroke-linecap="round"/>';
-      g+='<rect x="184" y="86" width="36" height="30" rx="6" fill="'+cloth+'"/>';
-      g+='<line x1="200" y1="116" x2="200" y2="168" stroke="'+cloth+'" stroke-width="16" stroke-linecap="round"/>';
-      g+=head(200,186);
-      g+='<line x1="200" y1="100" x2="118" y2="78" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
-    }else{
-      var hx=210, hy=90+drop*0.35, hx2=120, hy2=78;
-      g+='<line x1="230" y1="200" x2="210" y2="'+(130+drop*0.2)+'" stroke="'+skin+'" stroke-width="12" stroke-linecap="round"/>';
-      g+='<rect x="190" y="'+(118+drop*0.2)+'" width="36" height="28" rx="6" fill="'+cloth+'"/>';
-      g+='<line x1="208" y1="'+(120+drop*0.2)+'" x2="'+(160)+'" y2="'+(86+drop*0.15)+'" stroke="'+cloth+'" stroke-width="16" stroke-linecap="round"/>';
-      g+=head(148,76+drop*0.12);
-      g+='<line x1="170" y1="'+(96+drop*0.15)+'" x2="118" y2="78" stroke="'+skin+'" stroke-width="8" stroke-linecap="round"/>';
-    }
-  }
-  g+='</svg>';
-  return g;
+
+var DAVE_IMG={
+  pancake:{Easy:"media/dave-pancake-easy.jpg",Difficult:"media/dave-pancake-difficult.jpg",Hard:"media/dave-pancake-hard.jpg"},
+  fig4:{Easy:"media/dave-fig4-easy.jpg",Difficult:"media/dave-fig4-difficult.jpg",Hard:"media/dave-fig4-hard.jpg"},
+  hip:{Easy:"media/dave-hip-easy.jpg",Difficult:"media/dave-hip-difficult.jpg",Hard:"media/dave-hip-hard.jpg"},
+  jack:{Easy:"media/dave-jack-easy.jpg",Difficult:"media/dave-jack-difficult.jpg",Hard:"media/dave-jack-hard.jpg"},
+  lat:{Easy:"media/dave-lat-easy.jpg",Difficult:"media/dave-lat-difficult.jpg",Hard:"media/dave-lat-hard.jpg"}
+};
+function davePic(id,level){
+  var src=(DAVE_IMG[id]&&DAVE_IMG[id][level])||(DAVE_IMG[id]&&DAVE_IMG[id].Easy)||"";
+  var st=daveStretches.filter(function(s){return s.id===id;})[0];
+  var alt=(st?st.name:"Stretch")+" — "+level;
+  return '<img src="'+src+'" alt="'+alt+'" width="900" height="506">';
 }
 
 function loadLevels(){
@@ -489,7 +426,7 @@ function renderDaveList(){
   daveStretches.forEach(function(st,i){
     var lv=D.levels[st.id];
     html+='<div class="card stretch" data-stretch="'+st.id+'">';
-    html+='<div class="pic">'+daveSvg(st.id,lv)+"</div>";
+    html+='<div class="pic">'+davePic(st.id,lv)+"</div>";
     html+="<h2 style=\"margin:10px 0 0\">"+(i+1)+". "+st.name+"</h2>";
     html+='<p class="sub">'+st.pos+(st.sides===2?" · 30 s each side":" · 30 s")+"</p>";
     html+='<div class="seg" role="radiogroup" aria-label="Difficulty for '+st.name+'">'+segHtml(st.id,lv)+"</div>";
@@ -575,7 +512,7 @@ function renderDavePlay(force){
     $("dName").textContent=st.name;
     $("dSub").textContent="Stretch "+(u.si+1)+" of 5 · "+st.pos;
     $("dLvl").textContent=(u.side?u.side+" side · ":"")+lv;
-    $("dPic").innerHTML=daveSvg(st.id,lv);
+    $("dPic").innerHTML=davePic(st.id,lv);
     $("dHow").textContent=st.how[lv];
     $("dSeg").innerHTML=segHtml(st.id,lv);
     Array.prototype.forEach.call($("dSeg").querySelectorAll("button"),function(b){
